@@ -1,0 +1,11 @@
+{
+  "ApiBaseUrl": "http://your-server.com:3000/api",
+  "AgentKey": "your-agent-key-here",
+  "DeviceId": "your-device-id",
+  "CompanyCode": "1234567812345678",
+  "PollInterval": 300000,
+  "InventoryInterval": 86400000,
+  "AgentVersion": "2.0.0",
+  "AgentType": "native"
+}
+

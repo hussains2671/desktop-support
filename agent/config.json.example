@@ -1,0 +1,10 @@
+{
+  "ApiBaseUrl": "http://UFOMUM-AbdulA.ufomoviez.com:3000/api",
+  "AgentKey": "your-agent-key-here",
+  "DeviceId": "your-device-id",
+  "CompanyCode": "1234567812345678",
+  "CompanyId": "your-company-id",
+  "PollInterval": 300000,
+  "InventoryInterval": 86400000
+}
+

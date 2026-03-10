@@ -1,0 +1,36 @@
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+HOST=0.0.0.0
+
+# API URLs
+API_BASE_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3001
+
+# HTTPS Configuration
+USE_HTTPS=false
+
+# JWT Configuration
+JWT_SECRET=your-secret-key-change-this-in-production
+JWT_EXPIRY=7d
+
+# Database Configuration (PostgreSQL)
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=desktop_support
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_DIALECT=postgres
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_ENABLE=true
+
+# Gemini AI Configuration (Optional)
+GEMINI_API_KEY=your-gemini-api-key-here
+
+# Agent Download URL (for auto-update)
+AGENT_DOWNLOAD_URL=http://localhost:3000/api/agent/download/native
+

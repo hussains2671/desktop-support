@@ -1,0 +1,58 @@
+# Docker Compose Override for HTTPS Development
+# This file adds Nginx reverse proxy with SSL support
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.https.yml up
+
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy with HTTPS
+  nginx:
+    image: nginx:alpine
+    container_name: desktop_support_nginx
+    ports:
+      - "80:80"   # HTTP (redirects to HTTPS)
+      - "443:443" # HTTPS
+    volumes:
+      # Nginx configuration
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # SSL certificates (development)
+      - ./certs/dev:/etc/nginx/ssl/dev:ro
+      # Logs
+      - ./nginx/logs:/var/log/nginx
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - SSL_CERT_PATH=/etc/nginx/ssl/dev/localhost.pem
+      - SSL_KEY_PATH=/etc/nginx/ssl/dev/localhost-key.pem
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Backend - Update environment for HTTPS
+  backend:
+    environment:
+      - API_BASE_URL=${API_BASE_URL:-https://localhost}
+      - FRONTEND_URL=${FRONTEND_URL:-https://localhost}
+      - USE_HTTPS=true
+    # Remove direct port exposure when using HTTPS proxy
+    # Keep it for now to allow direct access if needed
+    # ports:
+    #   - "3000:3000"
+
+  # Frontend - Update environment for HTTPS
+  frontend:
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-https://localhost/api}
+    # Remove direct port exposure when using HTTPS proxy
+    # Keep it for now to allow direct access if needed
+    # ports:
+    #   - "3001:3001"
+

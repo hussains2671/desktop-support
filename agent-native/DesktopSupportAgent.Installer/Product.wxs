@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="Desktop Support Agent" Language="1033" Version="2.0.0" Manufacturer="Aaditech Solution" UpgradeCode="YOUR-GUID-HERE">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Desktop Support Agent is already installed." />
+    <MediaTemplate />
+
+    <Feature Id="ProductFeature" Title="Desktop Support Agent" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="DesktopSupportAgent">
+          <Component Id="ServiceExecutable" Guid="YOUR-GUID-HERE">
+            <File Id="AgentExe" Source="..\DesktopSupportAgent.Service\bin\Release\net6.0-windows\DesktopSupportAgent.exe" KeyPath="yes" />
+            <ServiceInstall
+              Id="ServiceInstall"
+              Type="ownProcess"
+              Name="DesktopSupportAgent"
+              DisplayName="Desktop Support Agent"
+              Description="Desktop Support Agent - System Monitoring Service"
+              Start="auto"
+              Account="LocalSystem"
+              ErrorControl="normal"
+              Interactive="no">
+              <ServiceDependency Id="Tcpip" />
+            </ServiceInstall>
+            <ServiceControl Id="ServiceControl" Stop="both" Remove="uninstall" Name="DesktopSupportAgent" Wait="yes" />
+          </Component>
+          
+          <Component Id="ConfigFile" Guid="YOUR-GUID-HERE">
+            <File Id="ConfigJson" Source="config.json.template" KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+  </Product>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ServiceExecutable" Guid="YOUR-GUID-HERE">
+        <File Source="..\DesktopSupportAgent.Service\bin\Release\net6.0-windows\DesktopSupportAgent.exe" />
+        <ServiceInstall
+          Id="ServiceInstall"
+          Type="ownProcess"
+          Name="DesktopSupportAgent"
+          DisplayName="Desktop Support Agent"
+          Description="Desktop Support Agent - System Monitoring Service"
+          Start="auto"
+          Account="LocalSystem"
+          ErrorControl="normal"
+          Interactive="no" />
+        <ServiceControl Id="ServiceControl" Stop="both" Remove="uninstall" Name="DesktopSupportAgent" Wait="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
+

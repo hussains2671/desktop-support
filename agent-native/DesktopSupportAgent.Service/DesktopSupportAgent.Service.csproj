@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>false</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>DesktopSupportAgent</AssemblyName>
+    <RootNamespace>DesktopSupportAgent</RootNamespace>
+    <Version>2.0.0</Version>
+    <Authors>Aaditech Solution</Authors>
+    <Company>Aaditech Solution</Company>
+    <Product>Desktop Support Agent</Product>
+    <Description>Native Windows Service Agent for Desktop Support System</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Management" Version="7.0.2" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
+

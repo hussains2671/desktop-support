@@ -1,0 +1,64 @@
+# Docker Compose Production Configuration with HTTPS
+# This file extends docker-compose.prod.yml with Nginx and Let's Encrypt
+# Usage: docker-compose -f docker-compose.prod.yml -f docker-compose.prod-https.yml up
+
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy with HTTPS (Production)
+  nginx:
+    image: nginx:alpine
+    container_name: desktop_support_nginx_prod
+    ports:
+      - "80:80"   # HTTP (for Let's Encrypt challenge)
+      - "443:443" # HTTPS
+    volumes:
+      # Nginx configuration
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      # Let's Encrypt certificates
+      - ./certs/letsencrypt:/etc/letsencrypt:ro
+      # Certbot webroot
+      - ./certs/certbot/www:/var/www/certbot:ro
+      # Logs
+      - ./nginx/logs:/var/log/nginx
+    environment:
+      - ENVIRONMENT=prod
+      - DOMAIN_NAME=${DOMAIN_NAME}
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "https://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Certbot for Let's Encrypt certificate management
+  certbot:
+    image: certbot/certbot
+    container_name: desktop_support_certbot
+    volumes:
+      - ./certs/letsencrypt:/etc/letsencrypt
+      - ./certs/certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${DOMAIN_NAME}
+    depends_on:
+      - nginx
+    networks:
+      - app_network
+
+  # Backend - Update environment for HTTPS
+  backend:
+    environment:
+      - API_BASE_URL=${API_BASE_URL:-https://${DOMAIN_NAME}}
+      - FRONTEND_URL=${FRONTEND_URL:-https://${DOMAIN_NAME}}
+      - USE_HTTPS=true
+      - NODE_ENV=production
+
+  # Frontend - Update environment for HTTPS
+  frontend:
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-https://${DOMAIN_NAME}/api}
+

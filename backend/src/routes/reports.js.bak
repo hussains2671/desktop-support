@@ -1,0 +1,16 @@
+const express = require('express');
+const router = express.Router();
+const reportsController = require('../controllers/reportsController');
+const { authenticate } = require('../middleware/auth');
+
+// All reports routes require authentication
+router.use(authenticate);
+
+// Report endpoints
+router.get('/devices', reportsController.getDeviceReport);
+router.get('/performance', reportsController.getPerformanceReport);
+router.get('/inventory', reportsController.getInventoryReport);
+router.post('/generate', reportsController.generateReport);
+
+module.exports = router;
+
