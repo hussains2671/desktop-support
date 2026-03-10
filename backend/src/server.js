@@ -27,6 +27,8 @@ const notificationsRoutes = require('./routes/notifications');
 const commandsRoutes = require('./routes/commands');
 const remoteDesktopRoutes = require('./routes/remoteDesktop');
 const fileTransferRoutes = require('./routes/fileTransfer');
+const ticketsRoutes = require('./routes/tickets');
+const slaRoutes = require('./routes/slas');
 
 // Swagger documentation
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -176,6 +178,8 @@ app.use('/api/notifications', notificationsRoutes);
 app.use('/api/commands', commandsRoutes);
 app.use('/api/remote-desktop', remoteDesktopRoutes);
 app.use('/api/file-transfer', fileTransferRoutes);
+app.use('/api/tickets', ticketsRoutes);
+app.use('/api/slas', slaRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -240,6 +244,16 @@ const startServer = async () => {
 
         // Create HTTP server
         const server = http.createServer(app);
+
+        // Initialize WebSocket service for real-time communication
+        try {
+            const WebSocketService = require('./services/websocketService');
+            const wsService = new WebSocketService(server);
+            global.wsService = wsService;
+            logger.info('✅ WebSocket service initialized');
+        } catch (error) {
+            logger.warn('⚠️  WebSocket service initialization failed:', error.message);
+        }
 
         // Initialize WebSocket proxy for VNC connections
         try {

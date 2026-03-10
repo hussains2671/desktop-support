@@ -1,0 +1,71 @@
+{
+  "api": {
+    "baseUrl": "https://api.yourapp.com",
+    "timeout": 30000,
+    "retryAttempts": 3,
+    "retryDelay": 5000
+  },
+  "agent": {
+    "id": "AGENT-001",
+    "key": "sk_live_your_agent_key_here",
+    "name": "Desktop-01",
+    "location": "Mumbai - Office",
+    "enabled": true
+  },
+  "collection": {
+    "hardware": {
+      "enabled": true,
+      "interval": 86400000
+    },
+    "software": {
+      "enabled": true,
+      "interval": 86400000
+    },
+    "performance": {
+      "enabled": true,
+      "interval": 60000
+    },
+    "events": {
+      "enabled": true,
+      "interval": 300000,
+      "maxLogs": 1000
+    },
+    "security": {
+      "enabled": true,
+      "interval": 3600000
+    }
+  },
+  "commands": {
+    "enabled": true,
+    "checkInterval": 30000,
+    "timeout": 1800000,
+    "maxConcurrent": 2
+  },
+  "vncServer": {
+    "enabled": true,
+    "port": 5900,
+    "password": "your_vnc_password",
+    "autoStart": true
+  },
+  "fileTransfer": {
+    "enabled": true,
+    "maxFileSize": 104857600,
+    "uploadPath": "C:\\DesktopSupportAgent\\uploads"
+  },
+  "updates": {
+    "enabled": true,
+    "checkInterval": 3600000,
+    "autoInstall": false
+  },
+  "logging": {
+    "level": "info",
+    "directory": "C:\\ProgramData\\DesktopSupportAgent\\logs",
+    "maxSize": 10485760,
+    "maxFiles": 10
+  },
+  "security": {
+    "sslVerify": true,
+    "certificatePath": "",
+    "encryptLocalData": true
+  }
+}

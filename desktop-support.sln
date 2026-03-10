@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agent-native", "agent-native", "{DC1F092E-254A-05EA-EAF2-FAB661FA9761}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesktopSupportAgent.Service (1)", "DesktopSupportAgent.Service (1)", "{A575EEA8-465E-D01E-458D-F1C72D113112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopSupportAgent.Service.Tests", "agent-native\DesktopSupportAgent.Service\DesktopSupportAgent.Service.Tests.csproj", "{E71AF219-FDD3-D5E5-2211-57362B4FE8B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopSupportAgent.Service", "agent-native\DesktopSupportAgent.Service\DesktopSupportAgent.Service.csproj", "{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E71AF219-FDD3-D5E5-2211-57362B4FE8B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E71AF219-FDD3-D5E5-2211-57362B4FE8B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E71AF219-FDD3-D5E5-2211-57362B4FE8B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E71AF219-FDD3-D5E5-2211-57362B4FE8B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A575EEA8-465E-D01E-458D-F1C72D113112} = {DC1F092E-254A-05EA-EAF2-FAB661FA9761}
+		{E71AF219-FDD3-D5E5-2211-57362B4FE8B0} = {A575EEA8-465E-D01E-458D-F1C72D113112}
+		{3F36A12C-2448-CE7E-9DE7-AAD2CAB37830} = {DC1F092E-254A-05EA-EAF2-FAB661FA9761}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8E2553F-A3DF-4664-B0DA-CE56F8DBF9C3}
+	EndGlobalSection
+EndGlobal

@@ -23,6 +23,8 @@ import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
 import RemoteCommands from './pages/RemoteCommands';
 import RemoteDesktop from './pages/RemoteDesktop';
+import Tickets from './pages/Tickets';
+import SLAManagement from './pages/SLAManagement';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import FeatureManagement from './components/Admin/FeatureManagement';
 
@@ -86,6 +88,8 @@ function App() {
                     <Route path="logs" element={<EventLogs />} />
                     <Route path="ai-insights" element={<AIInsights />} />
                     <Route path="alerts" element={<Alerts />} />
+                    <Route path="tickets" element={<Tickets />} />
+                    <Route path="sla-management" element={<SLAManagement />} />
                     <Route path="users" element={<Users />} />
                     <Route path="agents" element={<Agents />} />
                     <Route path="reports" element={<Reports />} />

@@ -21,7 +21,8 @@ import {
     Moon,
     Sun,
     Search,
-    Terminal
+    Terminal,
+    Ticket
 } from 'lucide-react';
 
 const Layout = () => {
@@ -46,6 +47,8 @@ const Layout = () => {
         { icon: FileText, label: 'Event Logs', path: '/logs', roles: ['all'] },
         { icon: Brain, label: 'AI Insights', path: '/ai-insights', roles: ['all'], feature: 'ai_insights' },
         { icon: AlertTriangle, label: 'Alerts', path: '/alerts', roles: ['all'] },
+        { icon: Ticket, label: 'Tickets', path: '/tickets', roles: ['all'] },
+        { icon: BarChart3, label: 'SLA Management', path: '/sla-management', roles: ['admin', 'company_admin', 'support'] },
         { icon: Users, label: 'Users', path: '/users', roles: ['super_admin', 'admin', 'company_admin'] },
         { icon: Server, label: 'Agents', path: '/agents', roles: ['super_admin', 'admin', 'company_admin'] },
         { icon: Terminal, label: 'Remote Commands', path: '/remote-commands', roles: ['super_admin', 'admin', 'company_admin', 'technician'] },

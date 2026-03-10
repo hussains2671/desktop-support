@@ -1162,26 +1162,130 @@ exports.downloadAgentScript = async (req, res) => {
 };
 
 // Get latest agent version (for auto-update)
+/**
+ * Get latest agent version
+ * GET /api/agent/versions/latest
+ * Returns version info without authentication (agents need this)
+ */
 exports.getLatestVersion = async (req, res) => {
     try {
-        // Get agent key from header (optional, for logging)
         const agentKey = req.headers['x-agent-key'];
         
-        // For now, return a static version
-        // In production, this should be stored in database or config
         const latestVersion = {
             version: '2.0.0',
-            download_url: process.env.AGENT_DOWNLOAD_URL || `${process.env.API_BASE_URL || 'http://localhost:3000'}/api/agent/download/native`,
-            is_mandatory: false,
-            release_notes: 'Native Windows Service Agent v2.0.0'
+            releaseDate: new Date('2025-03-10'),
+            downloadUrl: `${process.env.BACKEND_URL || process.env.API_BASE_URL || 'http://localhost:3000'}/api/agent/versions/2.0.0/download`,
+            changelog: [
+                'Security patches',
+                'Performance improvements',
+                'Bug fixes',
+                'WebSocket support for remote desktop'
+            ],
+            isMandatory: false
         };
 
+        logger.info(`Latest version requested${agentKey ? ' by agent' : ''}`);
         res.json({
             success: true,
             data: latestVersion
         });
     } catch (error) {
         logger.error('Get latest version error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+/**
+ * Download specific agent version
+ * GET /api/agent/versions/:version/download
+ */
+exports.downloadAgentVersion = async (req, res) => {
+    try {
+        const { version } = req.params;
+        
+        if (!/^\d+\.\d+\.\d+$/.test(version)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid version format. Expected: x.y.z'
+            });
+        }
+
+        const filePath = path.join(__dirname, '../../releases', `DesktopSupportAgent-${version}.msi`);
+        
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({
+                success: false,
+                message: `Version ${version} not found`
+            });
+        }
+
+        logger.info(`Downloading agent version ${version}`);
+        res.download(filePath, `DesktopSupportAgent-${version}.msi`, (err) => {
+            if (err) {
+                logger.error('Download error:', err);
+            } else {
+                logger.info(`Agent version ${version} downloaded successfully`);
+            }
+        });
+    } catch (error) {
+        logger.error('Download agent version error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+/**
+ * Report agent version after update
+ * POST /api/agent/versions/report
+ * Used by agent to confirm successful update
+ */
+exports.reportVersion = async (req, res) => {
+    try {
+        const { agent_id, version, status } = req.body;
+        const agentKey = req.headers['x-agent-key'];
+
+        if (!agent_id || !version) {
+            return res.status(400).json({
+                success: false,
+                message: 'agent_id and version are required'
+            });
+        }
+
+        const agent = await Agent.findOne({
+            where: { id: agent_id, agent_key: agentKey }
+        });
+
+        if (!agent) {
+            return res.status(401).json({
+                success: false,
+                message: 'Agent not found or invalid key'
+            });
+        }
+
+        await agent.update({ 
+            agent_version: version,
+            version: version,
+            last_heartbeat: new Date()
+        });
+
+        logger.info(`Agent ${agent_id} (${agent.hostname}) updated to version ${version}. Status: ${status || 'success'}`);
+
+        res.json({
+            success: true,
+            message: 'Version reported successfully',
+            data: {
+                agent_id: agent.id,
+                version: agent.version,
+                last_heartbeat: agent.last_heartbeat
+            }
+        });
+    } catch (error) {
+        logger.error('Report version error:', error);
         res.status(500).json({
             success: false,
             message: error.message

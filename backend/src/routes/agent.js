@@ -10,7 +10,11 @@ router.post('/heartbeat', agentController.heartbeat);
 router.post('/inventory', agentController.uploadInventory);
 router.post('/event-logs', agentController.uploadEventLogs);
 router.post('/performance', agentController.uploadPerformance);
+
+// Version management endpoints (public for agents)
 router.get('/versions/latest', agentController.getLatestVersion);
+router.get('/versions/:version/download', agentController.downloadAgentVersion);
+router.post('/versions/report', agentController.reportVersion);
 
 // Download installer files (require authentication)
 const { authenticate } = require('../middleware/auth');

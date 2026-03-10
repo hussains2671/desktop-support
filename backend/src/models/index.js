@@ -23,6 +23,11 @@ const SecurityStatus = require('./SecurityStatus')(sequelize, DataTypes);
 const Alert = require('./Alert')(sequelize, DataTypes);
 const AIInsight = require('./AIInsight')(sequelize, DataTypes);
 const Ticket = require('./Ticket')(sequelize, DataTypes);
+const TicketComment = require('./TicketComment')(sequelize, DataTypes);
+const TicketHistory = require('./TicketHistory')(sequelize, DataTypes);
+const SLA = require('./SLA')(sequelize, DataTypes);
+const SLABreach = require('./SLABreach')(sequelize, DataTypes);
+const SLAMetric = require('./SLAMetric')(sequelize, DataTypes);
 const AgentConfiguration = require('./AgentConfiguration')(sequelize, DataTypes);
 const AuditLog = require('./AuditLog')(sequelize, DataTypes);
 
@@ -131,6 +136,35 @@ AuditLog.belongsTo(Company, { foreignKey: 'company_id', as: 'Company' });
 User.hasMany(AuditLog, { foreignKey: 'user_id', as: 'AuditLogs' });
 AuditLog.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
 
+// Ticket relationships
+Ticket.hasMany(TicketComment, { foreignKey: 'ticket_id', as: 'Comments' });
+TicketComment.belongsTo(Ticket, { foreignKey: 'ticket_id', as: 'Ticket' });
+
+User.hasMany(TicketComment, { foreignKey: 'created_by', as: 'TicketComments' });
+TicketComment.belongsTo(User, { foreignKey: 'created_by', as: 'CreatedBy' });
+
+Ticket.hasMany(TicketHistory, { foreignKey: 'ticket_id', as: 'History' });
+TicketHistory.belongsTo(Ticket, { foreignKey: 'ticket_id', as: 'Ticket' });
+
+User.hasMany(TicketHistory, { foreignKey: 'changed_by', as: 'TicketHistories' });
+TicketHistory.belongsTo(User, { foreignKey: 'changed_by', as: 'ChangedBy' });
+
+// SLA relationships
+Company.hasMany(SLA, { foreignKey: 'company_id', as: 'SLAs' });
+SLA.belongsTo(Company, { foreignKey: 'company_id', as: 'Company' });
+
+User.hasMany(SLA, { foreignKey: 'created_by', as: 'CreatedSLAs' });
+SLA.belongsTo(User, { foreignKey: 'created_by', as: 'CreatedBy' });
+
+SLA.hasMany(SLABreach, { foreignKey: 'sla_id', as: 'Breaches', onDelete: 'CASCADE' });
+SLABreach.belongsTo(SLA, { foreignKey: 'sla_id', as: 'SLA' });
+
+Ticket.hasMany(SLABreach, { foreignKey: 'ticket_id', as: 'Breaches', onDelete: 'CASCADE' });
+SLABreach.belongsTo(Ticket, { foreignKey: 'ticket_id', as: 'Ticket' });
+
+Company.hasMany(SLAMetric, { foreignKey: 'company_id', as: 'SLAMetrics' });
+SLAMetric.belongsTo(Company, { foreignKey: 'company_id', as: 'Company' });
+
 module.exports = {
     sequelize,
     Company,
@@ -153,6 +187,11 @@ module.exports = {
     Alert,
     AIInsight,
     Ticket,
+    TicketComment,
+    TicketHistory,
+    SLA,
+    SLABreach,
+    SLAMetric,
     AgentConfiguration,
     AuditLog
 };
